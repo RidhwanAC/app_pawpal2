@@ -71,6 +71,7 @@ This is the continuation of the first module. In this module, I covers on develo
 
 ## Sample JSON
 get_my_pets.php
+
 {"status":"success","message":"OK","data":[{"pet_id":9,"pet_name":"Kuucing","pet_type":"Cat","category":"Rescue","description":"Kucing Hilang","image_paths":"pet_1.jpg,pet_2.jpg,pet_3.jpg","lat":"6.4322083","lng":"100.429365","created_at":"2025-12-16 13:55:31"},{"pet_id":8,"pet_name":"Oyen","pet_type":"Dog","category":"Adoption","description":"Help This Cat","image_paths":"pet_1.jpg,pet_2.jpg","lat":"6.4322083","lng":"100.429365","created_at":"2025-12-06 17:03:56"},{"pet_id":7,"pet_name":"Meow","pet_type":"Cat","category":"Adoption","description":"Abandoned Kitty","image_paths":"pet_1.jpg","lat":"6.4322083","lng":"100.429365","created_at":"2025-12-06 17:02:15"},{"pet_id":6,"pet_name":"meow","pet_type":"Cat","category":"Adoption","description":"Abandoned Cat","image_paths":"pet_1.jpg","lat":"6.4322083","lng":"100.429365","created_at":"2025-12-06 16:59:38"}]}
 
 ## Link to YouTube Demo
