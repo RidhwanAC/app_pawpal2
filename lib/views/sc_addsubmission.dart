@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:app_pawpal2/config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -605,9 +606,7 @@ class _AddSubmissionScreenState extends State<AddSubmissionScreen> {
       // Create multipart request
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse(
-          'http://10.144.131.161/app_pawpal/api/submit_pet.php',
-        ), // Replace with actual server URL
+        Uri.parse('${Config.baseUrl}/app_pawpal/api/submit_pet.php'),
       );
 
       // Add form fields

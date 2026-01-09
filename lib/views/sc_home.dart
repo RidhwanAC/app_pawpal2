@@ -1,3 +1,4 @@
+import 'package:app_pawpal2/config.dart';
 import 'package:app_pawpal2/models/pet.dart';
 import 'package:app_pawpal2/models/user.dart';
 import 'package:app_pawpal2/views/sc_addsubmission.dart';
@@ -29,7 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       child: Scaffold(
         appBar: AppBar(title: Text('Welcome Home, $name')),
-
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -44,7 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: InkWell(
                             borderRadius: BorderRadius.circular(20),
                             onTap: () {},
-
                             child: Card(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
@@ -104,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       String? userId = widget.user!.userId!;
       final uri = Uri.parse(
-        "http://10.144.131.161/app_pawpal/api/get_my_pets.php?userId=$userId",
+        "${Config.baseUrl}/app_pawpal/api/get_my_pets.php?userId=$userId",
       );
       final response = await http.get(uri);
       if (response.statusCode == 200) {
