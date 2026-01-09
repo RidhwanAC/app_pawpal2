@@ -1,3 +1,6 @@
+/// Purpose: A form screen for users to create a new pet submission.
+/// It handles image picking/cropping, location fetching, and submitting data to the server.
+
 import 'dart:io';
 import 'package:app_pawpal2/config/config.dart';
 import 'package:app_pawpal2/config/app_theme.dart';

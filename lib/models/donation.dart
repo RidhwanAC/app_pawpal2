@@ -1,13 +1,13 @@
 class Donation {
   String? donationId;
   String? petId;
-  String? donorId;
+  String? donorId; // id - user who donates
   String? donationType;
   String? amount;
   String? description;
   String? donationDate;
-  String? petName; // For listing user's donations
-  String? donorName; // For listing received donations
+  String? petName;
+  String? donorName; // name - user who donates
 
   Donation({
     this.donationId,

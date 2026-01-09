@@ -1,4 +1,7 @@
 <?php
+/**
+ * Purpose: Handles the submission of a new pet listing, including uploading images.
+ */
 header('Access-Control-Allow-Origin: *');
 include 'dbconnect.php';
 
@@ -52,7 +55,7 @@ if (!$has_image) {
     sendJsonResponse(['status' => 'failed', 'message' => $error_message]);
 }
 
-// Insert user data first to get pet_id
+// Query: Insert new pet record into the database
 $stmt = $conn->prepare("INSERT INTO tbl_pets (user_id, pet_name, pet_type, category, gender, age, health, description, lat, lng) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 $stmt->bind_param("isssssssss", $userId, $petName, $petType, $category, $gender, $age, $health, $description, $lat, $lng);
 
@@ -79,6 +82,7 @@ if ($stmt->execute()) {
 
     if (!empty($saved_filenames)) {
         $imagePaths = implode(",", $saved_filenames);
+        // Query: Update the pet record with the paths of the uploaded images
         $updateStmt = $conn->prepare("UPDATE tbl_pets SET image_paths = ? WHERE pet_id = ?");
         $updateStmt->bind_param("si", $imagePaths, $petId);
         if ($updateStmt->execute()) {
@@ -93,6 +97,9 @@ if ($stmt->execute()) {
     sendJsonResponse(['status' => 'failed', 'message' => 'Database insertion failed']);
 }
 
+/**
+ * Function: Sends a JSON response and exits the script.
+ */
 function sendJsonResponse($response) {
     header('Content-Type: application/json');
     echo json_encode($response);

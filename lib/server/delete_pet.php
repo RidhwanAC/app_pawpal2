@@ -1,4 +1,7 @@
 <?php
+/**
+ * Purpose: Deletes a pet submission and removes associated image files from the server.
+ */
 header("Access-Control-Allow-Origin: *");
 include 'dbconnect.php';
 
@@ -12,7 +15,7 @@ if (!$petId) {
     sendJsonResponse(['status' => 'failed', 'message' => 'Pet ID is required']);
 }
 
-// Get image paths to delete files
+// Query: Select image paths for the pet to delete files from the server
 $stmt = $conn->prepare("SELECT image_paths FROM tbl_pets WHERE pet_id = ?");
 $stmt->bind_param("i", $petId);
 $stmt->execute();
@@ -31,6 +34,7 @@ if ($row = $result->fetch_assoc()) {
     }
 }
 
+// Query: Delete the pet record from the database
 $delStmt = $conn->prepare("DELETE FROM tbl_pets WHERE pet_id = ?");
 $delStmt->bind_param("i", $petId);
 
@@ -40,6 +44,9 @@ if ($delStmt->execute()) {
     sendJsonResponse(['status' => 'failed', 'message' => 'Failed to delete pet']);
 }
 
+/**
+ * Function: Sends a JSON response and exits the script.
+ */
 function sendJsonResponse($response) {
     header('Content-Type: application/json');
     echo json_encode($response);

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Purpose: Retrieves a list of adoption requests made by a specific user.
+ */
 header("Access-Control-Allow-Origin: *");
 include 'dbconnect.php';
 
@@ -8,6 +11,7 @@ if (empty($userId)) {
     sendJsonResponse(['status' => 'failed', 'message' => 'User ID required']);
 }
 
+// Query: Select adoption requests made by the user, joined with pet details
 $sql = "SELECT a.adoption_id, a.status as adoption_status, a.date_requested, 
                p.pet_name, p.pet_type, p.image_paths, p.pet_id, p.status as pet_status
         FROM tbl_adoption a 
@@ -27,6 +31,9 @@ while ($row = $result->fetch_assoc()) {
 
 sendJsonResponse(['status' => 'success', 'data' => $data]);
 
+/**
+ * Function: Sends a JSON response and exits the script.
+ */
 function sendJsonResponse($response) {
     header('Content-Type: application/json');
     echo json_encode($response);

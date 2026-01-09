@@ -1,3 +1,6 @@
+/// Purpose: Lists adoption requests made by the user.
+/// (Note: This file appears to share logic with sc_myadoptions.dart).
+
 import 'dart:convert';
 import 'package:app_pawpal2/config/config.dart';
 import 'package:app_pawpal2/models/user.dart';

@@ -1,3 +1,6 @@
+/// Purpose: Handles user login authentication.
+/// Includes input validation, "Remember Me" functionality using SharedPreferences, and API calls.
+
 import 'package:app_pawpal2/config/config.dart';
 import 'package:app_pawpal2/config/app_theme.dart';
 import 'package:app_pawpal2/models/user.dart';

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Purpose: Updates user profile information, including name, phone, and profile image.
+ */
 header('Access-Control-Allow-Origin: *');
 include 'dbconnect.php';
 
@@ -14,7 +17,7 @@ if (empty($userId) || empty($name) || empty($phone)) {
     sendJsonResponse(['status' => 'failed', 'message' => 'Missing required fields']);
 }
 
-// Check if username exists for OTHER users
+// Query: Check if the new username is already taken by another user
 $stmt = $conn->prepare("SELECT user_id FROM tbl_users WHERE user_name = ? AND user_id != ?");
 $stmt->bind_param("si", $name, $userId);
 $stmt->execute();
@@ -43,15 +46,17 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
 
 // Update Database
 if ($imagePath) {
+    // Query: Update user details including profile image
     $stmt = $conn->prepare("UPDATE tbl_users SET user_name = ?, user_phone = ?, profile_image = ? WHERE user_id = ?");
     $stmt->bind_param("sssi", $name, $phone, $imagePath, $userId);
 } else {
+    // Query: Update user details without changing profile image
     $stmt = $conn->prepare("UPDATE tbl_users SET user_name = ?, user_phone = ? WHERE user_id = ?");
     $stmt->bind_param("ssi", $name, $phone, $userId);
 }
 
 if ($stmt->execute()) {
-    // Fetch updated user data
+    // Query: Fetch the updated user data to return to the client
     $stmt = $conn->prepare("SELECT * FROM tbl_users WHERE user_id = ?");
     $stmt->bind_param("i", $userId);
     $stmt->execute();
@@ -71,6 +76,9 @@ if ($stmt->execute()) {
     sendJsonResponse(['status' => 'failed', 'message' => 'Database update failed']);
 }
 
+/**
+ * Function: Sends a JSON response and exits the script.
+ */
 function sendJsonResponse($response) {
     header('Content-Type: application/json');
     echo json_encode($response);

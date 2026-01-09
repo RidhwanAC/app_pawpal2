@@ -1,3 +1,6 @@
+/// Purpose: A public feed of all active pet submissions (excluding the user's own).
+/// Includes search and filtering capabilities.
+
 import 'dart:convert';
 import 'package:app_pawpal2/config/config.dart';
 import 'package:app_pawpal2/models/pet.dart';

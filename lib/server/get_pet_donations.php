@@ -1,9 +1,13 @@
 <?php
+/**
+ * Purpose: Retrieves a list of donations received for a specific pet.
+ */
 header("Access-Control-Allow-Origin: *");
 include 'dbconnect.php';
 
 $petId = $_GET['petId'] ?? '';
 
+// Query: Select donations for the pet, joined with user details to show donor name
 $sql = "SELECT d.*, u.user_name FROM tbl_donations d 
         JOIN tbl_users u ON d.donor_id = u.user_id 
         WHERE d.pet_id = ? 

@@ -1,3 +1,6 @@
+/// Purpose: Displays a list of pet submissions created by the current user.
+/// Allows refreshing the list and navigating to details or adding a new submission.
+
 import 'package:app_pawpal2/config/config.dart';
 import 'package:app_pawpal2/config/app_theme.dart';
 import 'package:app_pawpal2/models/pet.dart';

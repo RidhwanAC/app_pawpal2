@@ -1,4 +1,7 @@
 <?php
+/**
+ * Purpose: Updates the status of an adoption request and optionally updates the pet status.
+ */
 header("Access-Control-Allow-Origin: *");
 include 'dbconnect.php';
 
@@ -17,13 +20,14 @@ if (empty($adoptionId) || empty($status) || empty($petId)) {
 $conn->begin_transaction();
 
 try {
-    // Update adoption status
+    // Query: Update the status of the adoption request
     $stmt = $conn->prepare("UPDATE tbl_adoption SET status = ? WHERE adoption_id = ?");
     $stmt->bind_param("si", $status, $adoptionId);
     $stmt->execute();
 
     // If adopted, update pet status to inactive
     if ($status === 'Adopted') {
+        // Query: Set pet status to inactive if adoption is confirmed
         $stmtPet = $conn->prepare("UPDATE tbl_pets SET status = 'inactive' WHERE pet_id = ?");
         $stmtPet->bind_param("i", $petId);
         $stmtPet->execute();
@@ -36,6 +40,9 @@ try {
     sendJsonResponse(['status' => 'failed', 'message' => 'Database error: ' . $e->getMessage()]);
 }
 
+/**
+ * Function: Sends a JSON response and exits the script.
+ */
 function sendJsonResponse($response) {
     header('Content-Type: application/json');
     echo json_encode($response);

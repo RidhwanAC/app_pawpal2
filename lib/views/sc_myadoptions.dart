@@ -1,3 +1,6 @@
+/// Purpose: Lists the adoption requests made by the current user.
+/// Shows the status of each request (e.g., Waiting Response, Adopted, Rejected).
+
 import 'dart:convert';
 import 'package:app_pawpal2/config/config.dart';
 import 'package:app_pawpal2/models/user.dart';

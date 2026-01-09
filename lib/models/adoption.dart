@@ -1,14 +1,14 @@
 class Adoption {
   String? adoptionId;
   String? petId;
-  String? relinquisherId;
-  String? adoptedById;
+  String? relinquisherId; // id - user who relinquishes
+  String? adoptedById; // id - user who adopts
   String? status;
   String? motivation;
   String? dateRequested;
-  String? userName; // Adopter's name
-  String? userPhone; // Adopter's phone
-  String? userEmail; // Adopter's email
+  String? userName; // name - user who relinquishes
+  String? userPhone; // phone - user who relinquishes
+  String? userEmail; // email - user who relinquishes
 
   Adoption({
     this.adoptionId,

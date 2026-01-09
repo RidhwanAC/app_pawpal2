@@ -1,4 +1,7 @@
 <?php
+/**
+ * Purpose: Retrieves a list of pets submitted by a specific user.
+ */
 header("Access-Control-Allow-Origin: *");
 include 'dbconnect.php';
 
@@ -8,6 +11,7 @@ if (!$userId) {
     sendJsonResponse(['status' => 'failed', 'message' => 'User ID is required']);
 }
 
+// Query: Select all pets associated with the given user ID, ordered by most recent
 $stmt = $conn->prepare("SELECT * FROM tbl_pets WHERE user_id = ? ORDER BY pet_id DESC");
 $stmt->bind_param("i", $userId);
 $stmt->execute();
@@ -24,6 +28,9 @@ sendJsonResponse([
     'data' => $pets
 ]);
 
+/**
+ * Function: Sends a JSON response and exits the script.
+ */
 function sendJsonResponse($response) {
     header('Content-Type: application/json');
     echo json_encode($response);

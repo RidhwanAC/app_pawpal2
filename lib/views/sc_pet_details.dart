@@ -1,3 +1,6 @@
+/// Purpose: Displays details of a pet from the "Explore" section.
+/// Allows other users to request adoption or make donations depending on the category.
+
 import 'dart:convert';
 import 'package:app_pawpal2/config/config.dart';
 import 'package:app_pawpal2/models/pet.dart';

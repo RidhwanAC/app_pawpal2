@@ -1,3 +1,6 @@
+/// Purpose: Handles user registration, including form validation and API calls to create a new account.
+/// It collects user details like name, email, phone, and password.
+
 import 'dart:convert';
 import 'package:app_pawpal2/config/config.dart';
 import 'package:app_pawpal2/models/user.dart';

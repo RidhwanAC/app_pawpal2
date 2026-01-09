@@ -1,4 +1,7 @@
 <?php
+/**
+ * Purpose: Records a donation made by a user towards a specific pet.
+ */
 header('Access-Control-Allow-Origin: *');
 include 'dbconnect.php';
 
@@ -12,6 +15,7 @@ $type = $_POST['donation_type'] ?? '';
 $amount = $_POST['amount'] ?? null;
 $description = $_POST['description'] ?? null;
 
+// Query: Insert a new donation record into tbl_donations
 $stmt = $conn->prepare("INSERT INTO tbl_donations (pet_id, donor_id, donation_type, amount, description) VALUES (?, ?, ?, ?, ?)");
 $stmt->bind_param("iisds", $petId, $donorId, $type, $amount, $description);
 
@@ -21,6 +25,9 @@ if ($stmt->execute()) {
     sendJsonResponse(['status' => 'failed', 'message' => 'Failed to submit donation']);
 }
 
+/**
+ * Function: Sends a JSON response and exits the script.
+ */
 function sendJsonResponse($response) {
     header('Content-Type: application/json');
     echo json_encode($response);

@@ -1,3 +1,6 @@
+/// Purpose: The initial authentication screen that toggles between Login and Register views.
+/// It serves as the entry point for unauthenticated users.
+
 import 'package:app_pawpal2/views/login.dart';
 import 'package:app_pawpal2/views/register.dart';
 import 'package:flutter/material.dart';

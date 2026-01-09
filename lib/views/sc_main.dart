@@ -1,3 +1,6 @@
+/// Purpose: The main container screen after login.
+/// It handles navigation via a Drawer and switches between different main sections (My Submissions, Explore, etc.).
+
 import 'package:app_pawpal2/config/config.dart';
 import 'package:app_pawpal2/config/app_theme.dart';
 import 'package:app_pawpal2/models/user.dart';

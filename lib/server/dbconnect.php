@@ -1,4 +1,7 @@
 <?php
+/**
+ * Purpose: Establishes a connection to the MySQL database.
+ */
 $servername = "localhost";
 $username = "root";
 $password = "";

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Purpose: Submits a request to adopt a pet.
+ */
 header('Access-Control-Allow-Origin: *');
 include 'dbconnect.php';
 
@@ -11,6 +14,7 @@ $relinquisherId = $_POST['relinquisher_id'] ?? '';
 $adoptedById = $_POST['adopted_by_id'] ?? '';
 $motivation = $_POST['motivation'] ?? '';
 
+// Query: Insert a new adoption request record
 $stmt = $conn->prepare("INSERT INTO tbl_adoption (pet_id, relinquisher_id, adopted_by_id, motivation) VALUES (?, ?, ?, ?)");
 $stmt->bind_param("iiis", $petId, $relinquisherId, $adoptedById, $motivation);
 
@@ -20,6 +24,9 @@ if ($stmt->execute()) {
     sendJsonResponse(['status' => 'failed', 'message' => 'Failed to send request']);
 }
 
+/**
+ * Function: Sends a JSON response and exits the script.
+ */
 function sendJsonResponse($response) {
     header('Content-Type: application/json');
     echo json_encode($response);

@@ -1,3 +1,6 @@
+/// Purpose: Shows detailed information about a specific submission made by the user.
+/// It allows managing adoption requests (accept/reject), viewing received donations, and deleting the submission.
+
 import 'package:app_pawpal2/config/config.dart';
 import 'package:app_pawpal2/config/app_theme.dart';
 import 'package:app_pawpal2/models/adoption.dart';

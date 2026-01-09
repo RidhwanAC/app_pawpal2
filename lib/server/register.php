@@ -1,4 +1,7 @@
 <?php
+/**
+ * Purpose: Handles user registration by creating a new user account.
+ */
 header('Access-Control-Allow-Origin: *');
 include 'dbconnect.php';
 
@@ -17,7 +20,7 @@ if (empty($name) || empty($email) || empty($password) || empty($phone)) {
 
 $hashedpassword = sha1($password);
 
-// Check if email exists
+// Query: Check if the email address is already registered
 $stmt = $conn->prepare("SELECT user_email FROM tbl_users WHERE user_email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
@@ -25,7 +28,7 @@ if ($stmt->get_result()->num_rows > 0) {
     sendJsonResponse(['status' => 'failed', 'message' => 'Email already exists']);
 }
 
-// Check if username exists
+// Query: Check if the username is already taken
 $stmt = $conn->prepare("SELECT user_name FROM tbl_users WHERE user_name = ?");
 $stmt->bind_param("s", $name);
 $stmt->execute();
@@ -33,12 +36,12 @@ if ($stmt->get_result()->num_rows > 0) {
     sendJsonResponse(['status' => 'failed', 'message' => 'Username already exists']);
 }
 
-// Insert user
+// Query: Insert the new user record into the database
 $stmt = $conn->prepare("INSERT INTO tbl_users (user_name, user_email, user_password, user_phone) VALUES (?, ?, ?, ?)");
 $stmt->bind_param("ssss", $name, $email, $hashedpassword, $phone);
 
 if ($stmt->execute()) {
-    // Return user data immediately so Flutter can log them in
+    // Query: Fetch the newly created user data to return to the client
     $newId = $stmt->insert_id;
     $stmt = $conn->prepare("SELECT * FROM tbl_users WHERE user_id = ?");
     $stmt->bind_param("i", $newId);
@@ -55,6 +58,9 @@ if ($stmt->execute()) {
     sendJsonResponse(['status' => 'failed', 'message' => 'Registration failed']);
 }
 
+/**
+ * Function: Sends a JSON response and exits the script.
+ */
 function sendJsonResponse($response) {
     header('Content-Type: application/json');
     echo json_encode($response);

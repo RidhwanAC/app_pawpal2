@@ -1,3 +1,6 @@
+/// Purpose: Lists the donations made by the current user to other pets.
+/// Displays details like amount, type, and date of donation.
+
 import 'dart:convert';
 import 'package:app_pawpal2/config/config.dart';
 import 'package:app_pawpal2/models/donation.dart';

@@ -1,3 +1,6 @@
+/// Purpose: Displays and allows editing of the user's profile information.
+/// Users can update their name, phone number, and profile image.
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:app_pawpal2/config/config.dart';

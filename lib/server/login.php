@@ -1,4 +1,7 @@
 <?php
+/**
+ * Purpose: Handles user login authentication by verifying email and password.
+ */
 header('Access-Control-Allow-Origin: *');
 include 'dbconnect.php';
 
@@ -15,6 +18,7 @@ if (empty($email) || empty($password)) {
 
 $hashedpassword = sha1($password);
 
+// Query: Select user details matching the provided email and hashed password
 $stmt = $conn->prepare("SELECT * FROM `tbl_users` WHERE `user_email` = ? AND `user_password` = ?");
 $stmt->bind_param("ss", $email, $hashedpassword);
 $stmt->execute();
@@ -30,6 +34,9 @@ if ($result->num_rows > 0) {
     sendJsonResponse(['status' => 'failed', 'message' => 'Invalid email or password']);
 }
 
+/**
+ * Function: Sends a JSON response and exits the script.
+ */
 function sendJsonResponse($response) {
     header('Content-Type: application/json');
     echo json_encode($response);
