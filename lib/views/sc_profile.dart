@@ -2,6 +2,7 @@
 /// Users can update their name, phone number, and profile image.
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:app_pawpal2/config/config.dart';
 import 'package:app_pawpal2/config/app_theme.dart';
@@ -271,7 +272,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
       }
     } else {
-      print("Error: ${response.statusCode}");
+      log("Error: ${response.statusCode}");
     }
   }
 }

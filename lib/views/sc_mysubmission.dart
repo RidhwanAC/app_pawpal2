@@ -1,6 +1,8 @@
 /// Purpose: Displays a list of pet submissions created by the current user.
 /// Allows refreshing the list and navigating to details or adding a new submission.
 
+import 'dart:developer';
+
 import 'package:app_pawpal2/config/config.dart';
 import 'package:app_pawpal2/config/app_theme.dart';
 import 'package:app_pawpal2/models/pet.dart';
@@ -109,13 +111,13 @@ class _MySubmissionScreenState extends State<MySubmissionScreen> {
                                         ),
                                         decoration: BoxDecoration(
                                           color: AppTheme.primaryColor
-                                              .withOpacity(0.1),
+                                              .withValues(alpha: 0.1),
                                           borderRadius: BorderRadius.circular(
                                             8,
                                           ),
                                           border: Border.all(
                                             color: AppTheme.primaryColor
-                                                .withOpacity(0.5),
+                                                .withValues(alpha: 0.5),
                                           ),
                                         ),
                                         child: Text(
@@ -190,7 +192,7 @@ class _MySubmissionScreenState extends State<MySubmissionScreen> {
         }
       }
     } catch (e) {
-      print(e);
+      log(e.toString());
     }
   }
 

@@ -1,6 +1,7 @@
 /// Purpose: A form screen for users to create a new pet submission.
 /// It handles image picking/cropping, location fetching, and submitting data to the server.
 
+import 'dart:developer';
 import 'dart:io';
 import 'package:app_pawpal2/config/config.dart';
 import 'package:app_pawpal2/config/app_theme.dart';
@@ -353,7 +354,9 @@ class _AddSubmissionScreenState extends State<AddSubmissionScreen> {
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: AppTheme.borderColor.withOpacity(0.5)),
+        borderSide: BorderSide(
+          color: AppTheme.borderColor.withValues(alpha: 0.5),
+        ),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
@@ -366,7 +369,7 @@ class _AddSubmissionScreenState extends State<AddSubmissionScreen> {
     return BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(12),
-      border: Border.all(color: AppTheme.borderColor.withOpacity(0.5)),
+      border: Border.all(color: AppTheme.borderColor.withValues(alpha: 0.5)),
     );
   }
 
@@ -789,7 +792,7 @@ class _AddSubmissionScreenState extends State<AddSubmissionScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(message), backgroundColor: Colors.green),
             );
-            print(message);
+            log(message);
             Navigator.pop(context);
           }
         } else {
@@ -802,7 +805,7 @@ class _AddSubmissionScreenState extends State<AddSubmissionScreen> {
                 backgroundColor: Colors.red,
               ),
             );
-            print(message);
+            log(message);
           }
         }
       } else {
@@ -813,7 +816,7 @@ class _AddSubmissionScreenState extends State<AddSubmissionScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(errMsg), backgroundColor: Colors.red),
           );
-          print(errMsg);
+          log(errMsg);
         }
       }
     } catch (e) {
@@ -821,7 +824,7 @@ class _AddSubmissionScreenState extends State<AddSubmissionScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
         );
-        print('Error: $e');
+        log('Error: $e');
       }
     }
   }

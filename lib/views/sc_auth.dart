@@ -238,7 +238,7 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   // 0 - Login, 1 - Register
-  navigatePage(int index) => () {
+  VoidCallback navigatePage(int index) => () {
     setState(() {
       _currentIndex = index;
     });

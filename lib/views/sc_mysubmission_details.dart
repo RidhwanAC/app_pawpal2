@@ -191,7 +191,7 @@ class _MySubmissionDetailsScreenState extends State<MySubmissionDetailsScreen> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
               const SizedBox(height: 10),
-              ...requests.map((req) => _buildRequestCard(req)).toList(),
+              ...requests.map((req) => _buildRequestCard(req)),
             ],
           );
         } catch (e) {

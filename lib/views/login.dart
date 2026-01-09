@@ -240,7 +240,7 @@ class _LoginViewState extends State<LoginView> {
       builder: (context) {
         return PopScope(
           canPop: false,
-          onPopInvoked: (bool didPop) {
+          onPopInvokedWithResult: (bool didPop, result) {
             if (didPop) {
               return;
             }

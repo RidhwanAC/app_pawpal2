@@ -2,6 +2,7 @@
 /// Allows other users to request adoption or make donations depending on the category.
 
 import 'dart:convert';
+import 'dart:developer';
 import 'package:app_pawpal2/config/config.dart';
 import 'package:app_pawpal2/models/pet.dart';
 import 'package:app_pawpal2/models/user.dart';
@@ -361,7 +362,7 @@ class _PetDetailsScreenState extends State<PetDetailsScreen> {
         ),
       );
     } catch (e) {
-      print(e);
+      log(e.toString());
     }
   }
 }
