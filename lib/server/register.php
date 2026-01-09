@@ -18,15 +18,23 @@ if (empty($name) || empty($email) || empty($password) || empty($phone)) {
 $hashedpassword = sha1($password);
 
 // Check if email exists
-$stmt = $conn->prepare("SELECT email FROM tbl_users WHERE email = ?");
+$stmt = $conn->prepare("SELECT user_email FROM tbl_users WHERE user_email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
 if ($stmt->get_result()->num_rows > 0) {
     sendJsonResponse(['status' => 'failed', 'message' => 'Email already exists']);
 }
 
+// Check if username exists
+$stmt = $conn->prepare("SELECT user_name FROM tbl_users WHERE user_name = ?");
+$stmt->bind_param("s", $name);
+$stmt->execute();
+if ($stmt->get_result()->num_rows > 0) {
+    sendJsonResponse(['status' => 'failed', 'message' => 'Username already exists']);
+}
+
 // Insert user
-$stmt = $conn->prepare("INSERT INTO tbl_users (name, email, password, phone) VALUES (?, ?, ?, ?)");
+$stmt = $conn->prepare("INSERT INTO tbl_users (user_name, user_email, user_password, user_phone) VALUES (?, ?, ?, ?)");
 $stmt->bind_param("ssss", $name, $email, $hashedpassword, $phone);
 
 if ($stmt->execute()) {

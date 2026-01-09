@@ -15,7 +15,7 @@ if (empty($email) || empty($password)) {
 
 $hashedpassword = sha1($password);
 
-$stmt = $conn->prepare("SELECT * FROM `tbl_users` WHERE `email` = ? AND `password` = ?");
+$stmt = $conn->prepare("SELECT * FROM `tbl_users` WHERE `user_email` = ? AND `user_password` = ?");
 $stmt->bind_param("ss", $email, $hashedpassword);
 $stmt->execute();
 $result = $stmt->get_result();

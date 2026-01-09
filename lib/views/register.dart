@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:app_pawpal2/config/config.dart';
 import 'package:app_pawpal2/models/user.dart';
-import 'package:app_pawpal2/views/sc_home.dart';
+import 'package:app_pawpal2/views/sc_main.dart';
 import 'package:app_pawpal2/widgets/auth_listtile.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -272,7 +272,7 @@ class _RegisterViewState extends State<RegisterView> {
 
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => HomeScreen(user: user)),
+                MaterialPageRoute(builder: (context) => MainScreen(user: user)),
               );
               ScaffoldMessenger.of(context).clearSnackBars();
               ScaffoldMessenger.of(context).showSnackBar(

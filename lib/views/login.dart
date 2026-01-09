@@ -1,7 +1,7 @@
 import 'package:app_pawpal2/config/config.dart';
 import 'package:app_pawpal2/config/app_theme.dart';
 import 'package:app_pawpal2/models/user.dart';
-import 'package:app_pawpal2/views/sc_home.dart';
+import 'package:app_pawpal2/views/sc_main.dart';
 import 'package:app_pawpal2/widgets/auth_listtile.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -281,7 +281,7 @@ class _LoginViewState extends State<LoginView> {
               });
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => HomeScreen(user: user)),
+                MaterialPageRoute(builder: (context) => MainScreen(user: user)),
               );
               if (!isChecked) {
                 emailController.clear();
