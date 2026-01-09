@@ -2,6 +2,7 @@ import 'package:app_pawpal2/config/config.dart';
 import 'package:app_pawpal2/config/app_theme.dart';
 import 'package:app_pawpal2/models/user.dart';
 import 'package:app_pawpal2/views/sc_auth.dart';
+import 'package:app_pawpal2/views/sc_explore.dart';
 import 'package:app_pawpal2/views/sc_mysubmission.dart';
 import 'package:app_pawpal2/views/sc_profile.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final List<Widget> screens = [
       MySubmissionScreen(user: _user),
-      const Center(child: Text("Explore Submissions (Coming Soon)")),
+      ExploreScreen(user: _user),
       const Center(child: Text("My Donations (Coming Soon)")),
       ProfileScreen(
         user: _user,

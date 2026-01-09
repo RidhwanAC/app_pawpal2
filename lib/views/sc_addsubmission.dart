@@ -22,15 +22,19 @@ class AddSubmissionScreen extends StatefulWidget {
 class _AddSubmissionScreenState extends State<AddSubmissionScreen> {
   // Form field controllers
   final TextEditingController petNameController = TextEditingController();
+  final TextEditingController ageController = TextEditingController();
+  final TextEditingController healthController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
 
   // Dropdown values
   String? selectedPetType = 'Dog';
   String? selectedCategory = 'Adoption';
+  String? selectedGender = 'Male';
 
   final List<String> petTypes = ['Dog', 'Cat', 'Rabbit', 'Other'];
   final List<String> categories = ['Adoption', 'Donation'];
+  final List<String> genders = ['Male', 'Female', 'Unknown'];
 
   List<File?> images = [null, null, null];
   List<Uint8List?> webImages = [null, null, null];
@@ -41,6 +45,8 @@ class _AddSubmissionScreenState extends State<AddSubmissionScreen> {
   @override
   void dispose() {
     petNameController.dispose();
+    ageController.dispose();
+    healthController.dispose();
     descriptionController.dispose();
     addressController.dispose();
     super.dispose();
@@ -224,6 +230,61 @@ class _AddSubmissionScreenState extends State<AddSubmissionScreen> {
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: 16),
+
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildLabel("Gender"),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: _boxDecoration(),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: selectedGender,
+                            isExpanded: true,
+                            items: genders.map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedGender = newValue!;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildLabel("Age"),
+                      TextField(
+                        controller: ageController,
+                        decoration: _inputDecoration("e.g. 2 years"),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            _buildLabel("Health Condition"),
+            TextField(
+              controller: healthController,
+              decoration: _inputDecoration("e.g. Vaccinated, Spayed"),
             ),
             const SizedBox(height: 16),
 
@@ -586,6 +647,8 @@ class _AddSubmissionScreenState extends State<AddSubmissionScreen> {
       return;
     }
     if (petNameController.text.isEmpty ||
+        ageController.text.isEmpty ||
+        healthController.text.isEmpty ||
         descriptionController.text.isEmpty ||
         addressController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -624,6 +687,9 @@ class _AddSubmissionScreenState extends State<AddSubmissionScreen> {
     String petName = petNameController.text.trim();
     String petType = selectedPetType!;
     String category = selectedCategory!;
+    String gender = selectedGender!;
+    String age = ageController.text.trim();
+    String health = healthController.text.trim();
     String description = descriptionController.text.trim();
     String lat = currentPosition!.latitude.toString();
     String lng = currentPosition!.longitude.toString();
@@ -664,6 +730,9 @@ class _AddSubmissionScreenState extends State<AddSubmissionScreen> {
       request.fields['petName'] = petName;
       request.fields['petType'] = petType;
       request.fields['category'] = category;
+      request.fields['gender'] = gender;
+      request.fields['age'] = age;
+      request.fields['health'] = health;
       request.fields['description'] = description;
       request.fields['lat'] = lat;
       request.fields['lng'] = lng;

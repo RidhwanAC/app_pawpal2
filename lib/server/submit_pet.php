@@ -10,11 +10,14 @@ $userId = $_POST['userId'] ?? '';
 $petName = $_POST['petName'] ?? '';
 $petType = $_POST['petType'] ?? '';
 $category = $_POST['category'] ?? '';
+$gender = $_POST['gender'] ?? '';
+$age = $_POST['age'] ?? '';
+$health = $_POST['health'] ?? '';
 $description = $_POST['description'] ?? '';
 $lat = $_POST['lat'] ?? '';
 $lng = $_POST['lng'] ?? '';
 
-if (empty($userId) || empty($petName) || empty($description)) {
+if (empty($userId) || empty($petName) || empty($description) || empty($gender) || empty($age) || empty($health)) {
     sendJsonResponse(['status' => 'failed', 'message' => 'Missing required fields']);
 }
 
@@ -50,8 +53,8 @@ if (!$has_image) {
 }
 
 // Insert user data first to get pet_id
-$stmt = $conn->prepare("INSERT INTO tbl_pets (user_id, pet_name, pet_type, category, description, lat, lng) VALUES (?, ?, ?, ?, ?, ?, ?)");
-$stmt->bind_param("issssss", $userId, $petName, $petType, $category, $description, $lat, $lng);
+$stmt = $conn->prepare("INSERT INTO tbl_pets (user_id, pet_name, pet_type, category, gender, age, health, description, lat, lng) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("isssssssss", $userId, $petName, $petType, $category, $gender, $age, $health, $description, $lat, $lng);
 
 if ($stmt->execute()) {
     $petId = $stmt->insert_id;

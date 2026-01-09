@@ -319,6 +319,10 @@ class _MySubmissionScreenState extends State<MySubmissionScreen> {
                     const SizedBox(height: 16),
                     Text("Type: ${pet.petType}"),
                     Text("Category: ${pet.category}"),
+                    Text("Gender: ${pet.gender ?? 'N/A'}"),
+                    Text("Age: ${pet.age ?? 'N/A'}"),
+                    Text("Health: ${pet.health ?? 'N/A'}"),
+                    Text("Status: ${pet.status ?? 'N/A'}"),
                     const SizedBox(height: 10),
                     const Text(
                       "Description:",
