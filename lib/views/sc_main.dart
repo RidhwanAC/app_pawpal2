@@ -3,8 +3,10 @@ import 'package:app_pawpal2/config/app_theme.dart';
 import 'package:app_pawpal2/models/user.dart';
 import 'package:app_pawpal2/views/sc_auth.dart';
 import 'package:app_pawpal2/views/sc_explore.dart';
+import 'package:app_pawpal2/views/sc_myadoptions.dart';
 import 'package:app_pawpal2/views/sc_mysubmission.dart';
 import 'package:app_pawpal2/views/sc_profile.dart';
+import 'package:app_pawpal2/views/sc_user_donations.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,7 +33,8 @@ class _MainScreenState extends State<MainScreen> {
     final List<Widget> screens = [
       MySubmissionScreen(user: _user),
       ExploreScreen(user: _user),
-      const Center(child: Text("My Donations (Coming Soon)")),
+      MyAdoptionsScreen(user: _user),
+      UserDonationsScreen(user: _user),
       ProfileScreen(
         user: _user,
         onUserUpdated: (updatedUser) {
@@ -45,6 +48,7 @@ class _MainScreenState extends State<MainScreen> {
     final List<String> titles = [
       "My Submissions",
       "Explore Submissions",
+      "My Adoptions",
       "My Donations",
       "My Profile",
     ];
@@ -118,8 +122,8 @@ class _MainScreenState extends State<MainScreen> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.volunteer_activism),
-                title: const Text('My Donations'),
+                leading: const Icon(Icons.volunteer_activism),
+                title: const Text('My Adoptions'),
                 selected: _currentIndex == 2,
                 selectedColor: AppTheme.primaryColor,
                 onTap: () {
@@ -128,12 +132,22 @@ class _MainScreenState extends State<MainScreen> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.person),
-                title: const Text('My Profile'),
+                leading: const Icon(Icons.monetization_on),
+                title: const Text('My Donations'),
                 selected: _currentIndex == 3,
                 selectedColor: AppTheme.primaryColor,
                 onTap: () {
                   _onItemTapped(3);
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.person),
+                title: const Text('My Profile'),
+                selected: _currentIndex == 4,
+                selectedColor: AppTheme.primaryColor,
+                onTap: () {
+                  _onItemTapped(4);
                   Navigator.pop(context);
                 },
               ),

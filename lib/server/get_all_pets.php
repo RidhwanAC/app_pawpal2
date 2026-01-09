@@ -2,7 +2,18 @@
 header("Access-Control-Allow-Origin: *");
 include 'dbconnect.php';
 
-$stmt = $conn->prepare("SELECT p.*, u.user_name FROM tbl_pets p JOIN tbl_users u ON p.user_id = u.user_id WHERE p.status = 'active' ORDER BY p.pet_id DESC");
+$userId = $_GET['userId'] ?? '';
+
+$sql = "SELECT p.*, u.user_name FROM tbl_pets p JOIN tbl_users u ON p.user_id = u.user_id WHERE p.status = 'active'";
+if (!empty($userId)) {
+    $sql .= " AND p.user_id != ?";
+}
+$sql .= " ORDER BY p.pet_id DESC";
+
+$stmt = $conn->prepare($sql);
+if (!empty($userId)) {
+    $stmt->bind_param("i", $userId);
+}
 $stmt->execute();
 $result = $stmt->get_result();
 

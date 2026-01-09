@@ -3,6 +3,7 @@ import 'package:app_pawpal2/config/app_theme.dart';
 import 'package:app_pawpal2/models/pet.dart';
 import 'package:app_pawpal2/models/user.dart';
 import 'package:app_pawpal2/views/sc_addsubmission.dart';
+import 'package:app_pawpal2/views/sc_mysubmission_details.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -77,7 +78,7 @@ class _MySubmissionScreenState extends State<MySubmissionScreen> {
                         ),
                         child: InkWell(
                           borderRadius: BorderRadius.circular(16),
-                          onTap: () => _showDetailsDialog(pets[index]),
+                          onTap: () => _navigateToDetails(pets[index]),
                           child: Padding(
                             padding: const EdgeInsets.all(12),
                             child: Row(
@@ -238,185 +239,15 @@ class _MySubmissionScreenState extends State<MySubmissionScreen> {
     );
   }
 
-  void _showDetailsDialog(Pet pet) {
-    final imageList = (pet.imagePaths != null && pet.imagePaths!.isNotEmpty)
-        ? pet.imagePaths!.split(',')
-        : [];
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        int currentIndex = 0;
-        return StatefulBuilder(
-          builder: (context, setState) {
-            final scWidth = MediaQuery.of(context).size.width;
-            final imageWidth = scWidth * 0.42;
-            final imageHeight = imageWidth * 0.69; // 4:3 Aspect Ratio
-
-            return AlertDialog(
-              title: Text(pet.petName ?? 'Unknown'),
-              content: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (imageList.isNotEmpty)
-                      Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.arrow_back_ios),
-                                onPressed: currentIndex > 0
-                                    ? () => setState(() => currentIndex--)
-                                    : null,
-                              ),
-                              Container(
-                                width: imageWidth,
-                                height: imageHeight,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    color: Colors.grey.shade300,
-                                  ),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Image.network(
-                                    '${Config.baseUrl}/app_pawpal/assets/submissions/${imageList[currentIndex].trim()}',
-                                    fit: BoxFit.cover,
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
-                                            Container(
-                                              color: Colors.grey[200],
-                                              child: const Icon(
-                                                Icons.broken_image,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
-                                  ),
-                                ),
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.arrow_forward_ios),
-                                onPressed: currentIndex < imageList.length - 1
-                                    ? () => setState(() => currentIndex++)
-                                    : null,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            "Image ${currentIndex + 1} of ${imageList.length}",
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                    const SizedBox(height: 16),
-                    Text("Type: ${pet.petType}"),
-                    Text("Category: ${pet.category}"),
-                    Text("Gender: ${pet.gender ?? 'N/A'}"),
-                    Text("Age: ${pet.age ?? 'N/A'}"),
-                    Text("Health: ${pet.health ?? 'N/A'}"),
-                    Text("Status: ${pet.status ?? 'N/A'}"),
-                    const SizedBox(height: 10),
-                    const Text(
-                      "Description:",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Text(pet.description ?? 'No description'),
-                    const SizedBox(height: 10),
-                    const Text(
-                      "Date:",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Text(pet.createdAt ?? 'Unknown'),
-                  ],
-                ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    _confirmDeleteDialog(pet.petId!);
-                  },
-                  child: const Text(
-                    "Delete",
-                    style: TextStyle(color: Colors.red),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text("Close"),
-                ),
-              ],
-            );
-          },
-        );
-      },
+  Future<void> _navigateToDetails(Pet pet) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MySubmissionDetailsScreen(pet: pet),
+      ),
     );
-  }
-
-  void _confirmDeleteDialog(String petId) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Delete Pet"),
-          content: const Text("Are you sure you want to delete this listing?"),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("Cancel"),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                _deletePet(petId);
-              },
-              child: const Text("Delete", style: TextStyle(color: Colors.red)),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _deletePet(String petId) async {
-    try {
-      final response = await http.post(
-        Uri.parse("${Config.baseUrl}/app_pawpal/api/delete_pet.php"),
-        body: {'petId': petId},
-      );
-      if (response.statusCode == 200) {
-        var jsonResponse = jsonDecode(response.body);
-        if (jsonResponse['status'] == 'success') {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Pet deleted successfully"),
-                backgroundColor: Colors.green,
-              ),
-            );
-          }
-          _refreshScreen();
-        } else {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text("Failed: ${jsonResponse['message']}"),
-                backgroundColor: Colors.red,
-              ),
-            );
-          }
-        }
-      }
-    } catch (e) {
-      print(e);
+    if (result == true) {
+      _refreshScreen();
     }
   }
 }

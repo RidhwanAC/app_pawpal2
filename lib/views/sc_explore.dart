@@ -30,7 +30,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   Future<void> _loadPets() async {
     final response = await http.get(
-      Uri.parse("${Config.baseUrl}/app_pawpal/api/get_all_pets.php"),
+      Uri.parse(
+        "${Config.baseUrl}/app_pawpal/api/get_all_pets.php?userId=${widget.user.userId}",
+      ),
     );
 
     if (response.statusCode == 200) {
