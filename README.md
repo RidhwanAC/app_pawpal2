@@ -1,66 +1,120 @@
-# app_pawpal
+# PawPal App
 
-### **Description**
+## Description
 
-PawPal is a Flutter-based mobile application as a platform for pet adoption and donation.
-This is the continuation of the first module. In this module, I covers on developing the main content of the app PawPal which is to allow user add submission of their pets. There are 3 categories of submission which are adoption, donation, or rescue. User needs to fill in the form and add at least one image of the pet(up to 3 images only per pet). The listing of pets submissions are listed in the main screen.
+PawPal is a comprehensive Flutter-based mobile application designed to bridge the gap between pet owners, adopters, and donors. It serves as a platform for listing pets for adoption, donation, or rescue, allowing users to explore listings, request adoptions, and contribute donations to pets in need.
 
-## Module #2 Flow
+## Features
 
-1. **Main Screen**
-   - This module continues from Module #1 after successful authentication.
-   - The Main Screen displays a list of pet submissions created by users.
+### 1. User Authentication
 
-2. **Pet Submission Categories**
-   - Users can create pet submissions under the following categories:
-     - Adoption
-     - Donation
-     - Rescue
+- **Registration & Login**: Secure account creation and login system.
+- **Session Management**: "Remember Me" functionality using shared preferences to persist user sessions.
 
-3. **Add Pet Submission**
-   - User can tap the Floating Action Button from the main screen.
-   - User is navigated to the Pet Submission Form.
+### 2. Pet Submission & Management
 
-4. **Pet Submission Form**
-   - User is required to fill in pet details.
-   - All required fields must be completed before submission.
-   - Input validation is applied to ensure correct and complete data.
-   - Appropriate error messages are displayed when invalid or missing input is detected.
+- **Add Listings**: Users can list pets under categories: Adoption, Donation, or Rescue.
+- **Media Upload**: Support for uploading multiple images (up to 3) using camera or gallery, with image cropping capabilities.
+- **Location Services**: Automatic detection of current location to tag the pet's location.
+- **Management**: Users can view their submissions, check details, and delete listings.
 
-5. **Pet Image Upload**
+### 3. Explore & Search
 
-   - User must upload at least one image of the pet.
-   - A maximum of three images is allowed per pet submission.
-   - Image validation prevents users from exceeding the image limit.
-   - Submission is blocked if no image is added.
+- **Public Feed**: Browse all active pet submissions from other users.
+- **Search & Filter**: Search pets by name and filter results by pet type (e.g., Cat, Dog).
+- **Pet Details**: View comprehensive details including health, age, gender, and description.
 
-6. **Submit Pet Listing**
+### 4. Adoption System
 
-   - Upon successful validation, the pet submission is saved.
-   - User is redirected back to the Main Screen.
+- **Request Adoption**: Users can submit adoption requests with a motivation message.
+- **Status Tracking**: Track the status of requests (Waiting Response, Adopted, Rejected) in "My Adoptions".
+- **Owner Controls**: Pet owners can review incoming requests and Accept or Reject them. Accepting a request marks the pet as inactive in the public feed.
 
-7. **Pet Listings Display**
-   - All pet submissions are displayed in a list format on the main screen.
-   - Each listing shows pet name, type, category of submission and short description.
+### 5. Donation System
 
+- **Make Donations**: Users can donate Money, Food, or Medical supplies to specific pets.
+- **History**: View a history of donations made.
+- **Received Donations**: Pet owners can track donations received for their listings.
 
-## Widgets Used
+### 6. Profile Management
 
-| Widget Name          | Purpose                                                                 |
-| -------------------- | ----------------------------------------------------------------------- |
-| `SingleChildScrollView` | Allows the submission form to be scrollable on smaller screens        |
-| `GestureDetector`   | Detects taps for image selection and image navigation arrows            |
-| `DropdownButton`    | Allows user to select pet type and submission category                  |
-| `DropdownMenuItem`  | Displays selectable options inside dropdown menus                       |
-| `TextField`         | Captures pet name and displays auto-filled address                      |
-| `TextFormField`     | Captures multi-line pet description with character limit                |
-| `Image.file`        | Displays selected pet image from device storage                         |
-| `Image.memory`      | Displays selected pet image on web platform                             |
-| `IconButton`        | Triggers actions such as cancel, refresh location, camera, or gallery   |
-| `ElevatedButton`    | Submits the pet submission form                                         |
-| `AlertDialog`       | Confirms image source selection and submission confirmation             |
-| `SnackBar`          | Displays validation and error messages                                  |
+- **Edit Profile**: Update user information such as name and phone number.
+- **Profile Picture**: Upload and update profile images.
 
+## System Flow
+
+1.  **Authentication**: User logs in or registers.
+2.  **Dashboard**: User lands on the main screen with a navigation drawer.
+3.  **Listing**: A user submits a pet. The data is sent to the server and stored in the database.
+4.  **Discovery**: Other users see the pet in the "Explore" tab.
+5.  **Interaction**:
+    - **Adoption**: A user requests to adopt. The owner receives the request in "My Submissions" details.
+    - **Donation**: A user donates. The record is saved and visible to the owner.
+6.  **Completion**: If an adoption is accepted, the pet status updates to 'inactive', removing it from the Explore feed.
+
+## Project Setup
+
+### Prerequisites
+
+- Flutter SDK
+- PHP Server (XAMPP, WAMP, or live server)
+- MySQL Database
+
+### Server Side
+
+1.  Place the PHP files located in `lib/server/` into your server's public directory (e.g., `htdocs` for XAMPP).
+2.  Ensure the following directory structure exists on the server for uploads:
+    - `../assets/submissions/`
+    - `../assets/profile/`
+3.  Configure `dbconnect.php` with your database credentials.
+
+### Database Setup
+
+Create a database named `pawpal_db` and import the following tables:
+
+- **tbl_users**: Stores user credentials and profile info.
+- **tbl_pets**: Stores pet listings, location, and status.
+- **tbl_adoption**: Links pets, relinquishers, and adopters with status.
+- **tbl_donations**: Records donations linked to pets and donors.
+
+### Client Side (Flutter)
+
+1.  Clone the repository.
+2.  Update the `Config.baseUrl` in your Flutter project to point to your server's IP address or domain.
+3.  Run `flutter pub get` to install dependencies.
+4.  Run `flutter run` to launch the app.
+
+## Dependencies
+
+The project relies on the following key packages from `pubspec.yaml`:
+
+- `http`: For making API calls to the PHP backend.
+- `shared_preferences`: For local storage of user sessions and settings.
+- `geolocator`: For accessing device GPS location.
+- `geocoding`: For converting coordinates into human-readable addresses.
+- `image_picker`: For selecting images from the gallery or camera.
+- `image_cropper`: For cropping and rotating selected images.
+
+## API Usage
+
+The app communicates with a PHP backend via RESTful API endpoints. Key endpoints include:
+
+- **Auth**: `register.php`, `login.php`
+- **Pets**:
+  - `submit_pet.php`: Uploads pet data and images.
+  - `get_all_pets.php`: Fetches active pets for the Explore feed.
+  - `get_my_pets.php`: Fetches pets listed by the logged-in user.
+  - `delete_pet.php`: Removes a pet listing.
+- **Adoption**:
+  - `request_adoption.php`: Submits an adoption request.
+  - `get_adoption_requests.php`: Fetches requests for a specific pet (for owners).
+  - `get_my_adoptions.php`: Fetches requests made by the user.
+  - `update_adoption_status.php`: Updates status (Accept/Reject).
+- **Donation**:
+  - `submit_donation.php`: Records a donation.
+  - `get_my_donations_made.php`: Fetches user's donation history.
+  - `get_pet_donations.php`: Fetches donations received for a pet.
+- **Profile**: `update_profile.php`
 
 ## Authorship Note
 
@@ -69,10 +123,6 @@ This is the continuation of the first module. In this module, I covers on develo
 
 “I confirm that this project represents my own original work in accordance with academic integrity policies. No part of the code was fully generated by AI tools such as ChatGPT or GitHub Copilot. I relied solely on lecture notes, class tutorials, and official Flutter documentation. I understand that my work may be scrutinized, and if it is found that I did not personally develop the code, marks may be deducted, or the submission may be disqualified.”
 
-## Sample JSON
-get_my_pets.php
-
-{"status":"success","message":"OK","data":[{"pet_id":9,"pet_name":"Kuucing","pet_type":"Cat","category":"Rescue","description":"Kucing Hilang","image_paths":"pet_1.jpg,pet_2.jpg,pet_3.jpg","lat":"6.4322083","lng":"100.429365","created_at":"2025-12-16 13:55:31"},{"pet_id":8,"pet_name":"Oyen","pet_type":"Dog","category":"Adoption","description":"Help This Cat","image_paths":"pet_1.jpg,pet_2.jpg","lat":"6.4322083","lng":"100.429365","created_at":"2025-12-06 17:03:56"},{"pet_id":7,"pet_name":"Meow","pet_type":"Cat","category":"Adoption","description":"Abandoned Kitty","image_paths":"pet_1.jpg","lat":"6.4322083","lng":"100.429365","created_at":"2025-12-06 17:02:15"},{"pet_id":6,"pet_name":"meow","pet_type":"Cat","category":"Adoption","description":"Abandoned Cat","image_paths":"pet_1.jpg","lat":"6.4322083","lng":"100.429365","created_at":"2025-12-06 16:59:38"}]}
-
 ## Link to YouTube Demo
-https://youtu.be/JO2sq9c2Er0
+
+https://youtu.be/AF9uXFl8vUg
