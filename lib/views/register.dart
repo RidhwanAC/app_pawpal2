@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:app_pawpal2/config.dart';
+import 'package:app_pawpal2/config/config.dart';
 import 'package:app_pawpal2/models/user.dart';
 import 'package:app_pawpal2/views/sc_home.dart';
 import 'package:app_pawpal2/widgets/auth_listtile.dart';

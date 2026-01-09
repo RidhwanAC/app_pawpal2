@@ -1,5 +1,6 @@
 import 'dart:io';
-import 'package:app_pawpal2/config.dart';
+import 'package:app_pawpal2/config/config.dart';
+import 'package:app_pawpal2/config/app_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -54,227 +55,265 @@ class _AddSubmissionScreenState extends State<AddSubmissionScreen> {
   @override
   Widget build(BuildContext context) {
     final scWidth = MediaQuery.of(context).size.width;
-    final imageWidth = scWidth * 0.8 - 20; // 20 for padding
-    final imageHeight = imageWidth * 3 / 4; // 4:3 aspect ratio
     final bool canGoNext =
         currentIndex < images.length - 1 && _hasImageAt(currentIndex);
 
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Row(
-          children: [
-            const Text('Add Submission'),
-            Spacer(),
-            IconButton(
-              icon: const Icon(Icons.cancel),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
+        title: const Text(
+          'Add Submission',
+          style: TextStyle(
+            color: AppTheme.textColorDark,
+            fontWeight: FontWeight.bold,
+          ),
         ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.close, color: AppTheme.textColorDark),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Left Arrow
-                    Container(
-                      width: scWidth * 0.1 - 10,
-                      height: imageHeight,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(8),
-                          bottomLeft: Radius.circular(8),
-                        ),
-                      ),
-                      child: GestureDetector(
-                        onTap: currentIndex > 0 ? _previousImage : null,
-                        child: Icon(
-                          Icons.arrow_left,
-                          size: 30,
-                          color: currentIndex > 0 ? Colors.black : Colors.grey,
-                        ),
-                      ),
-                    ),
-                    // Image Container
-                    GestureDetector(
-                      onTap: _addMedia,
-                      child: Container(
-                        width: imageWidth,
-                        height: imageHeight,
-                        color: Colors.blue[200],
-                        child: _buildImageWidget(),
-                      ),
-                    ),
-                    // Right Arrow
-                    Container(
-                      width: scWidth * 0.1 - 10,
-                      height: imageHeight,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(8),
-                          bottomRight: Radius.circular(8),
-                        ),
-                      ),
-                      child: GestureDetector(
-                        onTap: canGoNext ? _nextImage : null,
-                        child: Icon(
-                          Icons.arrow_right,
-                          size: 30,
-                          color: canGoNext ? Colors.black : Colors.grey,
-                        ),
-                      ),
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image Picker Section
+            Center(
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppTheme.borderColor),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
                     ),
                   ],
                 ),
-                const SizedBox(height: 30),
-                // Pet Name TextField
-                SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    'Pet Name',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: TextField(
-                    controller: petNameController,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      hintText: 'Enter pet name',
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                // Pet Type and Submission Category Row
-                Row(
+                child: Column(
                   children: [
-                    Text(
-                      'Pet Type:',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
-                      child: DropdownButton<String>(
-                        value: selectedPetType,
-                        items: petTypes.map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedPetType = newValue!;
-                          });
-                        },
-                      ),
-                    ),
-                    Spacer(),
-                    Text(
-                      'Category:',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
-                      child: DropdownButton<String>(
-                        value: selectedCategory,
-                        items: categories.map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedCategory = newValue!;
-                          });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                // Description TextFormField
-                SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    'Description',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: TextFormField(
-                    controller: descriptionController,
-                    maxLines: 4,
-                    maxLength: 150,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText:
-                          'Enter description (e.g., color, distinguishing features)',
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                // Location/Address TextField
-                SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    'Location/Address',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          enabled: false,
-                          controller: addressController,
-                          decoration: InputDecoration(
-                            border: const OutlineInputBorder(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back_ios),
+                          color: currentIndex > 0
+                              ? AppTheme.primaryColor
+                              : Colors.grey,
+                          onPressed: currentIndex > 0 ? _previousImage : null,
+                        ),
+                        GestureDetector(
+                          onTap: _addMedia,
+                          child: Container(
+                            width: scWidth * 0.6,
+                            height: (scWidth * 0.6) * 0.75,
+                            decoration: BoxDecoration(
+                              color: AppTheme.scaffoldColor,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: Colors.grey.shade300),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: _buildImageWidget(),
+                            ),
                           ),
                         ),
+                        IconButton(
+                          icon: const Icon(Icons.arrow_forward_ios),
+                          color: canGoNext
+                              ? AppTheme.primaryColor
+                              : Colors.grey,
+                          onPressed: canGoNext ? _nextImage : null,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "Image ${currentIndex + 1} of 3",
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                    const Text(
+                      "Tap image to add/change",
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: AppTheme.primaryColor,
                       ),
-                      IconButton(
-                        icon: Icon(Icons.refresh),
-                        onPressed: () {
-                          _getCurrentLocation();
-                        },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+
+            // Form Fields
+            _buildLabel("Pet Name"),
+            TextField(
+              controller: petNameController,
+              decoration: _inputDecoration("Enter pet name"),
+            ),
+            const SizedBox(height: 16),
+
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildLabel("Type"),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: _boxDecoration(),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: selectedPetType,
+                            isExpanded: true,
+                            items: petTypes.map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedPetType = newValue!;
+                              });
+                            },
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 20),
-                // Submit Button
-                ElevatedButton(
-                  onPressed: _submitForm,
-                  child: const Text('Submit'),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildLabel("Category"),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: _boxDecoration(),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: selectedCategory,
+                            isExpanded: true,
+                            items: categories.map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedCategory = newValue!;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
-          ),
+            const SizedBox(height: 16),
+
+            _buildLabel("Description"),
+            TextFormField(
+              controller: descriptionController,
+              maxLines: 3,
+              maxLength: 150,
+              decoration: _inputDecoration("Describe the pet..."),
+            ),
+            const SizedBox(height: 16),
+
+            _buildLabel("Location"),
+            TextField(
+              controller: addressController,
+              readOnly: true,
+              maxLines: 2,
+              decoration: _inputDecoration("Address").copyWith(
+                suffixIcon: IconButton(
+                  icon: const Icon(
+                    Icons.my_location,
+                    color: AppTheme.primaryColor,
+                  ),
+                  onPressed: _getCurrentLocation,
+                ),
+              ),
+            ),
+            const SizedBox(height: 32),
+
+            // Submit Button
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: _submitForm,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text(
+                  "Submit Listing",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  InputDecoration _inputDecoration(String hint) {
+    return InputDecoration(
+      hintText: hint,
+      filled: true,
+      fillColor: Colors.white,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: AppTheme.borderColor),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: AppTheme.borderColor.withOpacity(0.5)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: AppTheme.primaryColor, width: 2),
+      ),
+    );
+  }
+
+  BoxDecoration _boxDecoration() {
+    return BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(12),
+      border: Border.all(color: AppTheme.borderColor.withOpacity(0.5)),
+    );
+  }
+
+  Widget _buildLabel(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          color: AppTheme.textColorDark,
         ),
       ),
     );
@@ -285,7 +324,9 @@ class _AddSubmissionScreenState extends State<AddSubmissionScreen> {
     final currentWebImage = webImages[currentIndex];
 
     if (currentImage == null && currentWebImage == null) {
-      return const Icon(Icons.add_a_photo);
+      return const Center(
+        child: Icon(Icons.add_a_photo, size: 40, color: Colors.grey),
+      );
     }
 
     if (kIsWeb) {
@@ -537,7 +578,10 @@ class _AddSubmissionScreenState extends State<AddSubmissionScreen> {
   void _submitForm() {
     if (images[0] == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please add at least one image')),
+        const SnackBar(
+          content: Text('Please add at least one image'),
+          backgroundColor: Colors.red,
+        ),
       );
       return;
     }
@@ -545,7 +589,10 @@ class _AddSubmissionScreenState extends State<AddSubmissionScreen> {
         descriptionController.text.isEmpty ||
         addressController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all the fields')),
+        const SnackBar(
+          content: Text('Please fill all the fields'),
+          backgroundColor: Colors.red,
+        ),
       );
       return;
     }
@@ -596,7 +643,10 @@ class _AddSubmissionScreenState extends State<AddSubmissionScreen> {
     if (validNativeImages.isEmpty && validWebImages.isEmpty) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('No valid images to upload')),
+          const SnackBar(
+            content: Text('No valid images to upload'),
+            backgroundColor: Colors.red,
+          ),
         );
       }
       return;
@@ -664,17 +714,22 @@ class _AddSubmissionScreenState extends State<AddSubmissionScreen> {
         final message = jsonResp['message'] ?? 'No message from server';
         if (status.toString().toLowerCase() == 'success') {
           if (mounted) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(message)));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(message), backgroundColor: Colors.green),
+            );
             print(message);
             Navigator.pop(context);
           }
         } else {
           if (mounted) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text('Upload failed: $message')));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Upload failed: status: $status, message: $message',
+                ),
+                backgroundColor: Colors.red,
+              ),
+            );
             print(message);
           }
         }
@@ -683,17 +738,17 @@ class _AddSubmissionScreenState extends State<AddSubmissionScreen> {
         String errMsg = 'Upload failed: HTTP ${response.statusCode}';
         if (responseBody.isNotEmpty) errMsg += '\n$responseBody';
         if (mounted) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(errMsg)));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(errMsg), backgroundColor: Colors.red),
+          );
           print(errMsg);
         }
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+        );
         print('Error: $e');
       }
     }

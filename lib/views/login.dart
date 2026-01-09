@@ -1,4 +1,5 @@
-import 'package:app_pawpal2/config.dart';
+import 'package:app_pawpal2/config/config.dart';
+import 'package:app_pawpal2/config/app_theme.dart';
 import 'package:app_pawpal2/models/user.dart';
 import 'package:app_pawpal2/views/sc_home.dart';
 import 'package:app_pawpal2/widgets/auth_listtile.dart';
@@ -81,8 +82,8 @@ class _LoginViewState extends State<LoginView> {
                 style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
               ),
               Checkbox(
-                activeColor: const Color(0xFF8B5E3B),
-                side: const BorderSide(color: Color(0xFF8B5E3B), width: 2),
+                activeColor: AppTheme.primaryColor,
+                side: const BorderSide(color: AppTheme.borderColor, width: 2),
                 value: isChecked,
                 onChanged: _rememberMe,
               ),
@@ -263,7 +264,7 @@ class _LoginViewState extends State<LoginView> {
 
     await http
         .post(
-          Uri.parse('${Config.baseUrl}//app_pawpal/api/login.php'),
+          Uri.parse('${Config.baseUrl}/app_pawpal/api/login.php'),
           body: {'email': email, 'password': password},
         )
         .then((response) async {

@@ -6,16 +6,17 @@ class User {
   String? phone;
   String? regDate;
 
-  User(
-      {this.userId,
-      this.name,
-      this.email,
-      this.password,
-      this.phone,
-      this.regDate});
+  User({
+    this.userId,
+    this.name,
+    this.email,
+    this.password,
+    this.phone,
+    this.regDate,
+  });
 
   User.fromJson(Map<String, dynamic> json) {
-    userId = json['user_id'];
+    userId = json['user_id'].toString();
     name = json['name'];
     email = json['email'];
     password = json['password'];
