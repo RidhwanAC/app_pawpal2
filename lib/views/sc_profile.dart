@@ -240,8 +240,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
         // Update SharedPreferences
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        // We only store email/pass for login, but if you stored other info, update it here.
-        // Since login uses email/pass to fetch fresh data, this is fine.
+        await prefs.setString('user_data', jsonEncode(updatedUser.toJson()));
 
         widget.onUserUpdated(updatedUser);
 

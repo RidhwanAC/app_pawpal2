@@ -156,11 +156,9 @@ class _LoginViewState extends State<LoginView> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (isChecked) {
       prefs.setString('email', emailController.text);
-      prefs.setString('password', passwordController.text);
       prefs.setBool('rememberMe', isChecked);
     } else {
       prefs.remove('email');
-      prefs.remove('password');
       prefs.remove('rememberMe');
     }
   }
@@ -170,9 +168,7 @@ class _LoginViewState extends State<LoginView> {
       bool? rememberMe = prefs.getBool('rememberMe');
       if (rememberMe != null && rememberMe) {
         String? email = prefs.getString('email');
-        String? password = prefs.getString('password');
         emailController.text = email ?? '';
-        passwordController.text = password ?? '';
         isChecked = true;
         setState(() {});
       }
@@ -274,6 +270,10 @@ class _LoginViewState extends State<LoginView> {
           if (response.statusCode == 200) {
             if (resarray['status'] == 'success') {
               User user = User.fromJson(resarray['data'][0]);
+
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              await prefs.setString('user_data', jsonEncode(user.toJson()));
+
               if (!mounted) return;
               Navigator.pop(context);
               setState(() {

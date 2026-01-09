@@ -5,6 +5,7 @@ import 'package:app_pawpal2/views/sc_main.dart';
 import 'package:app_pawpal2/widgets/auth_listtile.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -264,6 +265,10 @@ class _RegisterViewState extends State<RegisterView> {
             await Future.delayed(const Duration(milliseconds: 1000), () {});
             if (resarray['status'] == 'success') {
               User user = User.fromJson(resarray['data'][0]);
+
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              await prefs.setString('user_data', jsonEncode(user.toJson()));
+
               if (!mounted) return;
               Navigator.pop(context);
               setState(() {

@@ -1,9 +1,11 @@
 import 'package:app_pawpal2/config/config.dart';
 import 'package:app_pawpal2/config/app_theme.dart';
 import 'package:app_pawpal2/models/user.dart';
+import 'package:app_pawpal2/views/sc_auth.dart';
 import 'package:app_pawpal2/views/sc_mysubmission.dart';
 import 'package:app_pawpal2/views/sc_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainScreen extends StatefulWidget {
   final User user;
@@ -115,7 +117,7 @@ class _MainScreenState extends State<MainScreen> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.explore),
+                leading: Icon(Icons.volunteer_activism),
                 title: const Text('My Donations'),
                 selected: _currentIndex == 2,
                 selectedColor: AppTheme.primaryColor,
@@ -176,8 +178,15 @@ class _MainScreenState extends State<MainScreen> {
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () {
-                Navigator.popUntil(context, (route) => route.isFirst);
+              onPressed: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.remove('user_data');
+                if (!context.mounted) return;
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AuthScreen()),
+                  (route) => false,
+                );
               },
               child: const Text('Logout', style: TextStyle(color: Colors.red)),
             ),

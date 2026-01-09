@@ -30,7 +30,7 @@ class _AddSubmissionScreenState extends State<AddSubmissionScreen> {
   String? selectedCategory = 'Adoption';
 
   final List<String> petTypes = ['Dog', 'Cat', 'Rabbit', 'Other'];
-  final List<String> categories = ['Adoption', 'Donation', 'Rescue'];
+  final List<String> categories = ['Adoption', 'Donation'];
 
   List<File?> images = [null, null, null];
   List<Uint8List?> webImages = [null, null, null];

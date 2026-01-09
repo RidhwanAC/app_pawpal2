@@ -32,7 +32,6 @@ class User {
     user['user_id'] = userId;
     user['user_name'] = name;
     user['user_email'] = email;
-    user['user_password'] = password;
     user['user_phone'] = phone;
     user['profile_image'] = profileImage;
     user['reg_date'] = regDate;
